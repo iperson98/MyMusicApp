@@ -90,13 +90,13 @@ class SongSelectionViewModel @Inject constructor(
             selectedTracks.forEach {
                 repository.addApiTrackToPlaylist(it, playlistId)
             }
-            sendUiEvent(
-                UiEvent.ShowSnackBar(
-                    message = "Added ${selectedTracks.size} song(s) to playlist"
-                )
-            )
-            sendUiEvent(UiEvent.PopBackstack)
         }
+        sendUiEvent(
+            UiEvent.ShowSnackBar(
+                message = "Added ${selectedTracks.size} song(s) to playlist"
+            )
+        )
+        sendUiEvent(UiEvent.PopBackstack)
     }
 
     private fun sendUiEvent(event: UiEvent) {
