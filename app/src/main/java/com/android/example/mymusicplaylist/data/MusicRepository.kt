@@ -1,5 +1,6 @@
 package com.android.example.mymusicplaylist.data
 
+import com.android.example.mymusicplaylist.data.remote.ApiTrack
 import kotlinx.coroutines.flow.Flow
 
 interface MusicRepository {
@@ -16,5 +17,9 @@ interface MusicRepository {
     suspend fun getPlaylistById(id: Int): Playlist
 
     fun getPlaylists(): Flow<List<Playlist>>
+
+    suspend fun searchTracksByArtist(artistName: String): Result<List<ApiTrack>>
+
+    suspend fun addApiTrackToPlaylist(apiTrack: ApiTrack, playlistId: Int)
 
 }

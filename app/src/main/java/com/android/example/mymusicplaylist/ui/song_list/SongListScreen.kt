@@ -70,7 +70,7 @@ fun SongListScreen(
                 Spacer(modifier = Modifier.width(8.dp))
                 FloatingActionButton(
                     onClick = {
-                        onNavigate(UiEvent.Navigate(Routes.SONG_SELECTION_SCREEN))
+                        onNavigate(UiEvent.Navigate(Routes.SONG_SELECTION_SCREEN + "?playlistId=${viewModel.playlistId}"))
                     }
                 ) {
                     Icon(imageVector = Icons.Default.Search, contentDescription = "Add Songs")

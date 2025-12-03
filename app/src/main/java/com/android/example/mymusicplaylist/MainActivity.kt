@@ -13,6 +13,7 @@ import androidx.navigation.navArgument
 import com.android.example.mymusicplaylist.ui.add_playlist.AddPlaylistScreen
 import com.android.example.mymusicplaylist.ui.playlist.PlaylistScreen
 import com.android.example.mymusicplaylist.ui.song_list.SongListScreen
+import com.android.example.mymusicplaylist.ui.song_selection.SongSelectionScreen
 import com.android.example.mymusicplaylist.ui.theme.MyMusicPlaylistTheme
 import com.android.example.mymusicplaylist.util.Routes
 import com.android.example.mymusicplaylist.util.UiEvent
@@ -54,6 +55,23 @@ class MainActivity : ComponentActivity() {
                         )
                     ) {
                         SongListScreen(onNavigate = { event ->
+                            when (event) {
+                                is UiEvent.Navigate -> navController.navigate(event.route)
+                                is UiEvent.PopBackstack -> navController.popBackStack()
+                                else -> Unit
+                            }
+                        })
+                    }
+
+                    composable(
+                        route = Routes.SONG_SELECTION_SCREEN + "?playlistId={playlistId}",
+                        arguments = listOf(
+                            navArgument(name = "playlistId") {
+                                type = NavType.IntType
+                            }
+                        )
+                    ) {
+                        SongSelectionScreen(onNavigate = { event ->
                             when (event) {
                                 is UiEvent.Navigate -> navController.navigate(event.route)
                                 is UiEvent.PopBackstack -> navController.popBackStack()

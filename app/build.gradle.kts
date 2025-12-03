@@ -65,4 +65,13 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)  // For coroutines support
     ksp(libs.room.compiler)
+
+    // Retrofit for network calls
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging)
+
+    // Coil for image loading (album art)
+    implementation(libs.coil.compose)
 }

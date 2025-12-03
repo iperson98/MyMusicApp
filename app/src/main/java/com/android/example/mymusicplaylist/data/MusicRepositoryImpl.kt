@@ -1,8 +1,11 @@
 package com.android.example.mymusicplaylist.data
 
+import com.android.example.mymusicplaylist.data.remote.ApiTrack
+import com.android.example.mymusicplaylist.data.remote.AudioDbApi
+import com.android.example.mymusicplaylist.data.remote.toSongEntity
 import kotlinx.coroutines.flow.Flow
 
-class MusicRepositoryImpl(private val dao: MusicDao): MusicRepository {
+class MusicRepositoryImpl(private val dao: MusicDao, private val api: AudioDbApi): MusicRepository {
     override suspend fun insertSong(song: Song) {
         dao.insertSong(song)
     }
@@ -29,5 +32,18 @@ class MusicRepositoryImpl(private val dao: MusicDao): MusicRepository {
 
     override fun getPlaylists(): Flow<List<Playlist>> {
         return dao.getPlaylists()
+    }
+
+    override suspend fun searchTracksByArtist(artistName: String): Result<List<ApiTrack>> {
+        return try {
+            val response = api.getTopTracksByArtist(artistName)
+            Result.success(response.tracks ?: emptyList())
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun addApiTrackToPlaylist(apiTrack: ApiTrack, playlistId: Int) {
+        dao.insertSong(apiTrack.toSongEntity(playlistId))
     }
 }
