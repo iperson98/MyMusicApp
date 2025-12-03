@@ -7,7 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.android.example.mymusicplaylist.data.MusicDatabase
 import com.android.example.mymusicplaylist.data.MusicRepository
 import com.android.example.mymusicplaylist.data.MusicRepositoryImpl
-import com.android.example.mymusicplaylist.data.remote.AudioDbApi
+import com.android.example.mymusicplaylist.data.remote.audio_db.AudioDbApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

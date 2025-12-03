@@ -1,6 +1,6 @@
 package com.android.example.mymusicplaylist.data
 
-import com.android.example.mymusicplaylist.data.remote.ApiTrack
+import com.android.example.mymusicplaylist.data.remote.audio_db.ApiTrack
 import kotlinx.coroutines.flow.Flow
 
 interface MusicRepository {

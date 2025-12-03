@@ -2,7 +2,7 @@ package com.android.example.mymusicplaylist.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.android.example.mymusicplaylist.data.remote.ApiTrack
+import com.android.example.mymusicplaylist.data.remote.audio_db.ApiTrack
 import kotlinx.coroutines.delay
 
 class SongSelectionPagingSource(

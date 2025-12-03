@@ -1,8 +1,8 @@
 package com.android.example.mymusicplaylist.data
 
-import com.android.example.mymusicplaylist.data.remote.ApiTrack
-import com.android.example.mymusicplaylist.data.remote.AudioDbApi
-import com.android.example.mymusicplaylist.data.remote.toSongEntity
+import com.android.example.mymusicplaylist.data.remote.audio_db.ApiTrack
+import com.android.example.mymusicplaylist.data.remote.audio_db.AudioDbApi
+import com.android.example.mymusicplaylist.data.remote.audio_db.toSongEntity
 import kotlinx.coroutines.flow.Flow
 
 class MusicRepositoryImpl(private val dao: MusicDao, private val api: AudioDbApi) :

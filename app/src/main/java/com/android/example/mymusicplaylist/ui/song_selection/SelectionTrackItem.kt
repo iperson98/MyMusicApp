@@ -3,7 +3,6 @@ package com.android.example.mymusicplaylist.ui.song_selection
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,7 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.android.example.mymusicplaylist.data.remote.ApiTrack
+import com.android.example.mymusicplaylist.data.remote.audio_db.ApiTrack
 
 @Composable
 fun SelectionTrackItem(

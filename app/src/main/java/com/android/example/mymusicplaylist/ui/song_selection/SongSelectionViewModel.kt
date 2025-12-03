@@ -9,7 +9,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.android.example.mymusicplaylist.data.MusicRepository
 import com.android.example.mymusicplaylist.data.paging.SongSelectionPagingSource
-import com.android.example.mymusicplaylist.data.remote.ApiTrack
+import com.android.example.mymusicplaylist.data.remote.audio_db.ApiTrack
 import com.android.example.mymusicplaylist.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel

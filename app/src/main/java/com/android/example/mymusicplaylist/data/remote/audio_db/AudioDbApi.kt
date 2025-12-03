@@ -1,4 +1,4 @@
-package com.android.example.mymusicplaylist.data.remote
+package com.android.example.mymusicplaylist.data.remote.audio_db
 
 import retrofit2.http.GET
 import retrofit2.http.Query
