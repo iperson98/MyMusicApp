@@ -4,7 +4,6 @@ import com.android.example.mymusicplaylist.data.remote.ApiTrack
 
 data class SongSelectionState(
     val searchQuery: String = "",
-    val searchResults: List<ApiTrack> = emptyList(),
     val selectedTracks: Set<ApiTrack> = emptySet(),
     val isLoading: Boolean = false,
     val error: String? = null

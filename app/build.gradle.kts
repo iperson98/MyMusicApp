@@ -74,4 +74,7 @@ dependencies {
 
     // Coil for image loading (album art)
     implementation(libs.coil.compose)
+
+    implementation(libs.paging.runtime)
+    implementation(libs.paging.compose)
 }

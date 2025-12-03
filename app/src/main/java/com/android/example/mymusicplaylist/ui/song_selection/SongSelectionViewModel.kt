@@ -3,13 +3,21 @@ package com.android.example.mymusicplaylist.ui.song_selection
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.android.example.mymusicplaylist.data.MusicRepository
+import com.android.example.mymusicplaylist.data.paging.SongSelectionPagingSource
+import com.android.example.mymusicplaylist.data.remote.ApiTrack
 import com.android.example.mymusicplaylist.util.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -24,6 +32,9 @@ class SongSelectionViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(SongSelectionState())
     val state: StateFlow<SongSelectionState> = _state.asStateFlow()
+
+    private val _pagingData = MutableStateFlow<Flow<PagingData<ApiTrack>>>(emptyFlow())
+    val pagingData: StateFlow<Flow<PagingData<ApiTrack>>> = _pagingData.asStateFlow()
 
     private var _uiEvent = Channel<UiEvent>()
     val uiEvent = _uiEvent.receiveAsFlow()
@@ -62,11 +73,18 @@ class SongSelectionViewModel @Inject constructor(
                 .onSuccess { results ->
                     _state.update {
                         it.copy(
-                            searchResults = results,
                             isLoading = false,
                             error = if (results.isEmpty()) "No results for \"$query\"" else null
                         )
                     }
+                    // Populate page
+                    _pagingData.value = Pager(
+                        config = PagingConfig(
+                            pageSize = 10,
+                            enablePlaceholders = false
+                        ),
+                        pagingSourceFactory = { SongSelectionPagingSource(results) }
+                    ).flow.cachedIn(viewModelScope)
                 }
                 .onFailure { exception ->
                     _state.update {

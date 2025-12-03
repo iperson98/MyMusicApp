@@ -33,6 +33,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.android.example.mymusicplaylist.util.UiEvent
 
 @Composable
@@ -42,6 +44,8 @@ fun SongSelectionScreen(
 ) {
 
     val state = viewModel.state.collectAsStateWithLifecycle()
+    val pagingDataFlow = viewModel.pagingData.collectAsStateWithLifecycle()
+    val lazyPagingItems = pagingDataFlow.value.collectAsLazyPagingItems()
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(key1 = true) {
@@ -121,21 +125,36 @@ fun SongSelectionScreen(
                 }
             } else {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(state.value.searchResults, key = { it.id }) { track ->
-                        SelectionTrackItem(
-                            track = track,
-                            isSelected = state.value.selectedTracks.contains(track),
-                            onSelectionChange = { isSelected ->
-                                viewModel.onEvent(
-                                    SongSelectionEvent.OnTrackSelectionChange(
-                                        track,
-                                        isSelected
+                    items(
+                        count = lazyPagingItems.itemCount,
+                        key = { index -> lazyPagingItems[index]?.id ?: index }) { index ->
+                        lazyPagingItems[index]?.let { track ->
+                            SelectionTrackItem(
+                                track = track,
+                                isSelected = state.value.selectedTracks.contains(track),
+                                onSelectionChange = { isSelected ->
+                                    viewModel.onEvent(
+                                        SongSelectionEvent.OnTrackSelectionChange(
+                                            track,
+                                            isSelected
+                                        )
                                     )
-                                )
 
+                                }
+                            )
+                        }
+                    }
+                    if (lazyPagingItems.loadState.append is LoadState.Loading) {
+                        item {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
                             }
-
-                        )
+                        }
                     }
                 }
             }
