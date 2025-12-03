@@ -42,7 +42,7 @@ class PlaylistViewModel @Inject constructor(
             is PlaylistEvent.OnPlaylistClick -> {
                 sendUiEvent(
                     UiEvent.Navigate(
-                        route = Routes.SONG_LIST_SCREEN + "?playlistId=${event.playlistId}"
+                        route = Routes.SONG_LIST_SCREEN + "?playlistId=${event.playlistId}&playlistName=${event.playlistName}"
                     )
                 )
             }

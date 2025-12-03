@@ -47,10 +47,12 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable(
-                        route = Routes.SONG_LIST_SCREEN + "?playlistId={playlistId}",
+                        route = Routes.SONG_LIST_SCREEN + "?playlistId={playlistId}&playlistName={playlistName}",
                         arguments = listOf(
                             navArgument(name = "playlistId") {
                                 type = NavType.IntType
+                            }, navArgument(name = "playlistName") {
+                                type = NavType.StringType
                             }
                         )
                     ) {

@@ -20,5 +20,6 @@ data class Song(
     val playlistId: Int,
     val name: String,
     val artistName: String,
+    val albumName: String?,
     val thumbnailUrl: String
 )

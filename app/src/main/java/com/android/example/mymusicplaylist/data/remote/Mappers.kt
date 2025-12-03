@@ -8,6 +8,7 @@ fun ApiTrack.toSongEntity(playlistId: Int): Song {
         playlistId = playlistId,
         name = name,
         artistName = artistName,
+        albumName = albumName,
         thumbnailUrl = thumbnail ?: ""
     )
 }

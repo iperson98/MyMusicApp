@@ -19,6 +19,7 @@ class SongListViewModel @Inject constructor(
 ) : ViewModel() {
 
     var playlistId: Int = savedStateHandle.get<Int>("playlistId")!!
+    var playlistName: String = savedStateHandle.get<String>("playlistName")!!
     val songItems =  repository.getSongs(playlistId)
 
     var deletedSong: Song? = null

@@ -2,6 +2,8 @@ package com.android.example.mymusicplaylist.di
 
 import android.app.Application
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.android.example.mymusicplaylist.data.MusicDatabase
 import com.android.example.mymusicplaylist.data.MusicRepository
 import com.android.example.mymusicplaylist.data.MusicRepositoryImpl
@@ -21,10 +23,17 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+    private val MIGRATION_1_2 = object : Migration(1, 2) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE songs ADD COLUMN albumName TEXT")
+        }
+    }
+
     @Provides
     @Singleton
     fun provideMusicDatabase(app: Application): MusicDatabase {
-        return Room.databaseBuilder(app, MusicDatabase::class.java, "music_db").build()
+        return Room.databaseBuilder(app, MusicDatabase::class.java, "music_db")
+            .addMigrations(MIGRATION_1_2).build()
     }
 
     @Provides
