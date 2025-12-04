@@ -8,6 +8,7 @@ import com.android.example.mymusicplaylist.data.MusicDatabase
 import com.android.example.mymusicplaylist.data.MusicRepository
 import com.android.example.mymusicplaylist.data.MusicRepositoryImpl
 import com.android.example.mymusicplaylist.data.remote.audio_db.AudioDbApi
+import com.android.example.mymusicplaylist.data.remote.last_fm.LastFmApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,12 +17,28 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Provides
+    @Singleton
+    @Named("last_fm")
+    fun provideLastFmRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder().baseUrl(LastFmApi.BASE_URL).client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create()).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideLastFmApi(@Named("last_fm") retrofit: Retrofit): LastFmApi {
+        return retrofit.create(LastFmApi::class.java)
+    }
 
     private val MIGRATION_1_2 = object : Migration(1, 2) {
         override fun migrate(db: SupportSQLiteDatabase) {
@@ -66,7 +83,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMusicRepository(db: MusicDatabase, api: AudioDbApi): MusicRepository {
-        return MusicRepositoryImpl(db.dao, api)
+    fun provideMusicRepository(
+        db: MusicDatabase,
+        audioDbApi: AudioDbApi,
+        lastFmApi: LastFmApi
+    ): MusicRepository {
+        return MusicRepositoryImpl(db.dao, audioDbApi, lastFmApi)
     }
 }

@@ -1,5 +1,6 @@
 package com.android.example.mymusicplaylist.data
 
+import androidx.paging.PagingData
 import com.android.example.mymusicplaylist.data.remote.audio_db.ApiTrack
 import kotlinx.coroutines.flow.Flow
 
@@ -21,5 +22,8 @@ interface MusicRepository {
     suspend fun searchTracksByArtist(artistName: String): Result<List<ApiTrack>>
 
     suspend fun addApiTrackToPlaylist(apiTrack: ApiTrack, playlistId: Int)
+
+    suspend fun searchTracksByArtistPaged(artistName: String): Flow<PagingData<ApiTrack>>
+
 
 }

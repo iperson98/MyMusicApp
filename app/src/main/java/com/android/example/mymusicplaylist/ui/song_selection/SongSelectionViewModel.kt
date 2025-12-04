@@ -59,6 +59,20 @@ class SongSelectionViewModel @Inject constructor(
         }
     }
 
+    private fun searchWithLastFm() {
+        val query = _state.value.searchQuery.trim()
+
+        if (query.isBlank()) {
+            _state.update { it.copy(error = "Please enter an artist name") }
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update { it.copy(error = null) }
+            _pagingData.value = repository.searchTracksByArtistPaged(query).cachedIn(viewModelScope)
+        }
+    }
+
     private fun search() {
         val query = _state.value.searchQuery.trim()
         if (query.isBlank()) {

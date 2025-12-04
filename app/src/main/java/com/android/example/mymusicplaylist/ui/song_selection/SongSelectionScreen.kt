@@ -1,6 +1,6 @@
 package com.android.example.mymusicplaylist.ui.song_selection
 
-import android.widget.Space
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Search
@@ -119,12 +118,44 @@ fun SongSelectionScreen(
                 )
             }
 
-            if (state.value.isLoading) {
+            if (state.value.searchQuery.isBlank()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(
+                        text = "Enter an artist name to search",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            else if (state.value.isLoading) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
                 }
             } else {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    if (lazyPagingItems.loadState.refresh is LoadState.Loading) {
+                        item {
+                            Box(
+                                modifier = Modifier.fillParentMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
+
+                            }
+                        }
+                    }
+
+                    if (lazyPagingItems.loadState.refresh is LoadState.Error) {
+                        item {
+                            Text(
+                                text = "Error loading results. Tap to retry.",
+                                color = MaterialTheme.colorScheme.error,
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .clickable { lazyPagingItems.retry() }
+                            )
+                        }
+                    }
+
                     items(
                         count = lazyPagingItems.itemCount,
                         key = { index -> lazyPagingItems[index]?.id ?: index }) { index ->
@@ -154,6 +185,18 @@ fun SongSelectionScreen(
                             ) {
                                 CircularProgressIndicator()
                             }
+                        }
+                    }
+
+                    if (lazyPagingItems.loadState.append is LoadState.Error) {
+                        item {
+                            Text(
+                                text = "Error loading results. Tap to retry.",
+                                color = MaterialTheme.colorScheme.error,
+                                modifier = Modifier
+                                    .padding(16.dp)
+                                    .clickable { lazyPagingItems.retry() }
+                            )
                         }
                     }
                 }
